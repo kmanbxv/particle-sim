@@ -2,13 +2,20 @@ int particles = 200;//number of particles created
 int randVel = 16;//initialization range for random velocity
 int dist = 15;//collision distance
 int stroke = 15;//size of particles
+int elStroke = 4;
 
 float eLoss = 1;//energy retained in collisions between particles (0-1)
 
-Proton[] pro = new Proton[particles];
+Particle[] par = new Particle[particles];
 void setup(){
-  for(int i=0;i<pro.length;i++){
-    pro[i]= new Proton(random(width),random(height),random(randVel),random(randVel),random(255)); //make a bunch of randomly placed, oriented, and colored Proton objects
+  for(int i=0;i<par.length/3;i++){
+    par[i]= new Particle(random(width), random(height), random(randVel), random(randVel), 1); //make a bunch of randomly placed and oriented Particle objects
+  }
+  for(int i=par.length/3;i<par.length*2/3;i++){
+    par[i]= new Particle(random(width), random(height), random(randVel), random(randVel), 0); //make a bunch of randomly placed and oriented Neutron objects
+  }
+  for(int i=par.length*2/3;i<par.length;i++){
+    par[i]= new Particle(random(width), random(height), random(randVel*2), random(randVel*2), -1); //make a bunch of randomly placed and oriented Electron objects
   }
   size(1200, 650);
   frameRate(30);
@@ -16,8 +23,8 @@ void setup(){
 
 void draw() {
   background(0);
-  for(int i=0;i<pro.length;i++){
-    pro[i].update();
+  for(int i=0;i<par.length;i++){
+    par[i].update();
   }
 }
 
@@ -25,20 +32,20 @@ void draw() {
 
 void collision(){ //collisions betweeen particles (detection, messing with resultant velocities)
   float in;
-  for(int i= 0;i<particles;i++){
+    for(int i=0;i<particles;i++){
     for(int j=i+1;j<particles;j++){
-      if(getEuclidianDistance(pro[i].getPx(),pro[j].getPx(),pro[i].getPy(),pro[j].getPy())<dist){
-        in=pro[i].getVx();
-        pro[i].setVx(-eLoss*pro[j].getVy());
-        pro[j].setVy(-eLoss*in);
+      if(getEuclidianDistance(par[i].getPx(),par[j].getPx(),par[i].getPy(),par[j].getPy())<dist && par[i].getCharge()==par[j].getCharge()){
+        in=par[i].getVx();
+        par[i].setVx(-eLoss*par[j].getVy());
+        par[j].setVy(-eLoss*in);
         
-        in=pro[i].getVy();
-        pro[i].setVy(-eLoss*pro[j].getVx());
-        pro[j].setVx(-eLoss*in);
+        in=par[i].getVy();
+        par[i].setVy(-eLoss*par[j].getVx());
+        par[j].setVx(-eLoss*in);
         
         //change color randomly
-        pro[i].setColor(random(255));
-        pro[j].setColor(random(255));
+        //par[i].setColor(random(255));
+        //par[j].setColor(random(255));
       }
     }
   }

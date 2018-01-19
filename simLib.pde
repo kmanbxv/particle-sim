@@ -1,19 +1,23 @@
 float getEuclidianDistance(float x1, float x2, float y1, float y2){ //exactly what it sounds like
   return sqrt(  ((x1-x2)*(x1-x2)) + ((y1-y2)*(y1-y2)) );
 }
-class Proton{
+class Particle{
   float px;
   float py;
   float vx;
   float vy;
+  int charge;
   float col;
-  Proton(float posx, float posy, float velx, float vely, float c){ //Protons have 2-dimensional position and velocity, as well as a color value
-    px = posx; 
+  Particle(float posx, float posy, float velx, float vely, int c){ //particles have 2-dimensional position and velocity, as well as a color value
+    px = posx;
     py = posy;
     vx = velx;
     vy = vely;
-    col = c;
+    charge = c;
   } 
+  int getCharge(){
+    return this.charge;
+  }
   float getPx(){
     return this.px;
   }
@@ -38,12 +42,24 @@ class Proton{
   void setVy(float y){
     this.vy = y;
   }
-  void setColor(float c){
-    this.col = c;
+  void setCharge(int c){
+    this.charge = c;
   }
   
   void update(){ //draw next point
-    stroke(col,0,0); //color becomes random shade of red
+    switch(charge){
+      case 1:
+        strokeWeight(stroke);
+        stroke(255,0,0);
+        break;
+      case 0:
+        strokeWeight(stroke);
+        stroke(0,0,255);
+        break;
+      case -1:
+        strokeWeight(elStroke);
+        stroke(255,255,0);
+    }
     py += vy; //update x,y position
     px += vx;
     //////////////////////////////// collision check on bounding box
@@ -63,7 +79,6 @@ class Proton{
       px = 0;
       vx = -0.9*vx;
     }
-    strokeWeight(stroke);
     if (vx<2 && vx>-2) {
       vx=random(randVel);
     }
