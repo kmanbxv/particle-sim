@@ -1,5 +1,5 @@
 int particles = 200;//number of particles created
-int randVel = 16;//initialization range for random velocity
+int randVel = 10;//initialization range for random velocity
 int dist = 15;//collision distance
 int stroke = 15;//size of particles
 int elStroke = 4;
@@ -32,6 +32,7 @@ void draw() {
 
 void collision(){ //collisions betweeen particles (detection, messing with resultant velocities)
   float in;
+  float fudge = 0;
     for(int i=0;i<particles;i++){
     for(int j=i+1;j<particles;j++){
       if(getEuclidianDistance(par[i].getPx(),par[j].getPx(),par[i].getPy(),par[j].getPy())<dist && par[i].getCharge()==par[j].getCharge()){
@@ -42,6 +43,12 @@ void collision(){ //collisions betweeen particles (detection, messing with resul
         in=par[i].getVy();
         par[i].setVy(-eLoss*par[j].getVx());
         par[j].setVx(-eLoss*in);
+        
+        par[i].setPx(par[i].getPx()+fudge*par[i].getVx()); //fudge factor to add an extra step separating after collisions (stops accidental clumping)
+        par[i].setPy(par[i].getPy()+fudge*par[i].getVy());
+        
+        par[j].setPx(par[j].getPx()+fudge*par[j].getVx());
+        par[j].setPy(par[j].getPy()+fudge*par[j].getVy());
         
         //change color randomly
         //par[i].setColor(random(255));
