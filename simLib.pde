@@ -9,11 +9,11 @@ class Particle{
   int charge;
   float col;
   Particle(float posx, float posy, float velx, float vely, int c){ //particles have 2-dimensional position and velocity, as well as a color value
-    px = posx;
-    py = posy;
-    vx = velx;
-    vy = vely;
-    charge = c;
+    this.px = posx;
+    this.py = posy;
+    this.vx = velx;
+    this.vy = vely;
+    this.charge = c;
   } 
   int getCharge(){
     return this.charge;
